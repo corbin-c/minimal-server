@@ -103,12 +103,12 @@ module.exports = class minimalServer {
     console.log(...err);
   }
   async handler(req,res) {
-    let url = new URL("http://"+req.headers.host+req.url);
+    req.page = new URL("http://"+req.headers.host+req.url);
     if (this.verbose) {
       console.log((new Date()).toISOString()+"\t"+req.url);
     }
     try {
-      this.routes.find(e => e.path == url.pathname).handler(req,res);
+      this.routes.find(e => e.path == req.page.pathname).handler(req,res);
     } catch (e) {
       this.errorHandler("route "+url.pathname+" couldn't be followed",e);
     }
