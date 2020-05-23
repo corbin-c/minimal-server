@@ -105,7 +105,7 @@ module.exports = class minimalServer {
   async handler(req,res) {
     req.page = new URL("http://"+req.headers.host+req.url);
     if (this.verbose) {
-      console.log((new Date()).toISOString()+"\t"+req.url);
+      console.log(req.url);
     }
     try {
       this.routes.find(e => e.path == req.page.pathname).handler(req,res);
