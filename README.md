@@ -2,6 +2,12 @@
 
 This packages provides a minimal server.
 
+Before all, you should add the following line to your `.npmrc` file:
+
+```
+@corbin-c:registry=https://npm.pkg.github.com
+```
+
 How to use it:
 
 ```javascript
