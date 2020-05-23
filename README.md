@@ -8,7 +8,7 @@ How to use it:
 const minimalServer = require("@corbin-c/minimal-server");
 let server = new minimalServer();
 //one might want to define a static dir:
-server.enableStaticDir();
+server.enableStaticDir("./path-to-static-dir");
 //eventually start listening on port 5000 or on PORT env var, if defined:
 server.start();
 ```
