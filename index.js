@@ -110,7 +110,7 @@ module.exports = class minimalServer {
     try {
       this.routes.find(e => e.path == req.page.pathname).handler(req,res);
     } catch (e) {
-      this.errorHandler("route "+url.pathname+" couldn't be followed",e);
+      this.errorHandler("route "+req.page.pathname+" couldn't be followed",e);
     }
   }
   async setStaticFileRoute (routePath,localPath,live=false,binary="auto") {
