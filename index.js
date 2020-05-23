@@ -113,7 +113,7 @@ module.exports = class minimalServer {
       this.errorHandler("route "+req.page.pathname+" couldn't be followed",e);
     }
   }
-  async setStaticFileRoute (routePath,localPath,live=false,binary="auto") {
+  async setStaticFileRoute(routePath,localPath,live=false,binary="auto") {
     let file = { path: localPath };
     file.ext = file.path.split(".")[file.path.split(".").length-1];
     file.bin = (binary == "auto") ?
