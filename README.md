@@ -5,7 +5,7 @@ This packages provides a minimal server.
 First, you should add the following line to your `.npmrc` file:
 
 ```
-@corbin-c:registry=https://npm.pkg.github.com
+@corbin-c:registry=https://npm.pkg.github.com/corbin-c
 ```
 
 How to use it:
