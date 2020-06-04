@@ -98,6 +98,7 @@ module.exports = class minimalServer {
     this.MIMES = mimes;
     this.verbose = true;
     this.server = http.createServer((...args) => { this.handler.call(this,...args) });
+    this.fallback = {};
   }
   errorHandler(...err) {
     console.log(...err);
@@ -111,6 +112,7 @@ module.exports = class minimalServer {
       this.routes.find(e => e.path == req.page.pathname).handler(req,res);
     } catch (e) {
       this.errorHandler("route "+req.page.pathname+" couldn't be followed",e);
+      this.fallback.handler(req,res);
     }
   }
   async setStaticFileRoute(routePath,localPath,live=false,binary="auto") {
@@ -153,6 +155,7 @@ module.exports = class minimalServer {
         this.setStaticFileRoute(e.path,path+e.path,live);
         if (e.path.indexOf(index) >= 0) {
           this.setStaticFileRoute("/",path+e.path,live);
+          this.fallback = this.routes.find(route => route.path == "/"+e.path);
         }
       });
     } catch (e) {
