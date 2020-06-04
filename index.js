@@ -100,7 +100,9 @@ module.exports = class minimalServer {
     this.server = http.createServer((...args) => { this.handler.call(this,...args) });
   }
   errorHandler(...err) {
-    console.log(...err);
+    if (this.verbose) {
+      console.error(...err);
+    }
   }
   async handler(req,res) {
     req.page = new URL("http://"+req.headers.host+req.url);
@@ -110,7 +112,7 @@ module.exports = class minimalServer {
     try {
       this.routes.find(e => e.path == req.page.pathname).handler(req,res);
     } catch (e) {
-      this.errorHandler("route "+req.page.pathname+" couldn't be followed",e);
+      this.errorHandler("route "+req.page.pathname+" couldn't be followed",e.message);
       if (typeof this.fallback !== "undefined") {
         this.fallback.handler(req,res);
       } else {
