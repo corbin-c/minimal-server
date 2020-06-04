@@ -120,7 +120,7 @@ module.exports = class minimalServer {
         this.fallback.handler(req,res);
       } else {
         res.writeHead(404);
-        res.write(this.errors["404"];
+        res.write(this.errors["404"]);
         res.end();
       }
     }
