@@ -98,7 +98,6 @@ module.exports = class minimalServer {
     this.MIMES = mimes;
     this.verbose = true;
     this.server = http.createServer((...args) => { this.handler.call(this,...args) });
-    this.fallback = {};
   }
   errorHandler(...err) {
     console.log(...err);
@@ -112,7 +111,12 @@ module.exports = class minimalServer {
       this.routes.find(e => e.path == req.page.pathname).handler(req,res);
     } catch (e) {
       this.errorHandler("route "+req.page.pathname+" couldn't be followed",e);
-      this.fallback.handler(req,res);
+      if (typeof this.fallback !== "undefined") {
+        this.fallback.handler(req,res);
+      } else {
+        res.writeHead(404);
+        res.end();
+      }
     }
   }
   async setStaticFileRoute(routePath,localPath,live=false,binary="auto") {
@@ -150,14 +154,15 @@ module.exports = class minimalServer {
   }
   async enableStaticDir(live=false,path="./dist",index="index.html") {
     try {
-      (await TreeMaker(path)).list.map(e => {
+      let list = (await TreeMaker(path)).list
+      await Promise.all(list.map(async e => {
         e = {path:e.slice(1)};
-        this.setStaticFileRoute(e.path,path+e.path,live);
+        await this.setStaticFileRoute(e.path,path+e.path,live);
         if (e.path.indexOf(index) >= 0) {
-          this.setStaticFileRoute("/",path+e.path,live);
-          this.fallback = this.routes.find(route => route.path == "/"+e.path);
+          await this.setStaticFileRoute("/",path+e.path,live);
         }
-      });
+      }));
+      this.fallback = this.routes.find(route => route.path == "/"+index);
     } catch (e) {
       this.errorHandler("Error building static dir tree",e)
     }
